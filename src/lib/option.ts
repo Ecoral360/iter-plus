@@ -24,6 +24,16 @@ class OptionClass<T> {
     if (this.isNone()) return fallback;
     return this.val;
   }
+
+  unwrapOrElse<U>(
+    this: OptionClass<typeof _none>,
+    fallback: () => U
+  ): NoInfer<U>;
+  unwrapOrElse(this: SomeType<T>, fallback: () => T): T;
+  unwrapOrElse(fallback: () => T): T {
+    if (this.isNone()) return fallback();
+    return this.val;
+  }
 }
 
 const _none: unique symbol = Symbol('None value');
@@ -32,7 +42,7 @@ export type SomeType<T> = T extends typeof _none ? never : OptionClass<T>;
 
 export const None = <T = typeof _none>() => new OptionClass<T>(_none as any);
 
-export type Option<T> = OptionClass<T>
+export type Option<T> = OptionClass<T>;
 
 export const Some = <T>(val: T): SomeType<T> =>
   new OptionClass(val) as SomeType<T>;
@@ -45,6 +55,12 @@ export namespace option {
 
   export const unwrapOr = <T>(fallback: T): ((opt: Option<T>) => T) => {
     return (opt) => (opt.isSome() ? opt.val : fallback);
+  };
+
+  export const unwrapOrElse = <T>(
+    fallback: () => T
+  ): ((opt: Option<T>) => T) => {
+    return (opt) => (opt.isSome() ? opt.val : fallback());
   };
 
   export const mapSome = <T, T2>(

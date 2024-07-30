@@ -11,8 +11,8 @@ test('obj', (t) => {
 
   const v = pipe(TEST_OBJ)
     .$(Object.keys)
-    .$(pList.map((k) => k.toUpperCase()))
-    .get();
+    .$$((k) => k.toUpperCase())
+    .collect();
 
   t.deepEqual(v, keys);
 });
@@ -22,8 +22,7 @@ test('iter', (t) => {
 
   const v = pipe(TEST_OBJ)
     .$(Object.keys)
-    .$(p.map((k) => k.toUpperCase()))
-    .get()
+    .$$((k) => k.toUpperCase())
     .collect();
 
   t.deepEqual(v, keys);
@@ -36,8 +35,7 @@ test('pipelines', (t) => {
 
   const actualProjects = pipe(TEST_OBJ['employees'])
     .$(iter.flatMap((el) => el.projects))
-    .$(iter.map((el) => el.name))
-    .get()
+    .$$((el) => el.name)
     .collect();
 
   t.deepEqual(actualProjects, expectedProjects);
@@ -51,7 +49,7 @@ test('pipelines 2', (t) => {
 
   const actualProjects = pipe(TEST_OBJ['employees'])
     .$(iter.flatMap((el) => el.projects))
-    .$(iter.map((el) => el.name))
+    .$$((el) => el.name)
     .$(iter.reduce((acc, curr) => `${acc}, ${curr}`))
     .$(option.unwrapOr(''))
     .get();

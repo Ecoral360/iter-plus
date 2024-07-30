@@ -1,4 +1,4 @@
-import { iter } from '../iter/iter';
+import { Iter, iter } from '../iter/iter';
 import { ElementOf } from '../types';
 
 export * from './pipe-ns';
@@ -6,8 +6,12 @@ export * from './pipe-ns';
 export class Pipe<I> {
   constructor(private func: () => I) {}
 
-  get() {
+  get(): I {
     return this.func();
+  }
+
+  collect(this: Pipe<Iterable<ElementOf<I>>>): ElementOf<I>[] {
+    return [...this.get()];
   }
 
   $<O>(func: (arg: I) => O) {
