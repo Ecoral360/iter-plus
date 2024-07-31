@@ -65,7 +65,7 @@
         "standard-version": "^9.0.0",
         "ts-node": "^9.0.0",
         "tsc": "^2.0.4",
-        "typedoc": "^0.19.0",
+        "typedoc": "^0.26.5",
         "typescript": "^5.5.3"
     },
     "files": [
