@@ -1,4 +1,4 @@
-import { None, Option, Some } from '../option';
+import { None, Option, Some } from '../option/option';
 
 export class Iter<T> {
   constructor(private iterator: Iterator<T, undefined>) {}

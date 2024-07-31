@@ -1,4 +1,4 @@
-import { Iter, iter } from '../iter/iter';
+import { iter } from '../iter/iter';
 import { ElementOf } from '../types';
 
 export * from './pipe-ns';

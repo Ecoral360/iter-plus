@@ -1,4 +1,3 @@
-import { Iter } from '../iter/iter';
 import { ElementOf } from '../types';
 export * from './pipe-ns';
 export declare class Pipe<I> {
@@ -7,7 +6,7 @@ export declare class Pipe<I> {
     get(): I;
     collect(this: Pipe<Iterable<ElementOf<I>>>): ElementOf<I>[];
     $<O>(func: (arg: I) => O): Pipe<O>;
-    $$<O>(func: (arg: ElementOf<I>) => O): Pipe<Iter<O>>;
+    $$<O>(func: (arg: ElementOf<I>) => O): Pipe<import("../iter/iter").Iter<O>>;
 }
 export declare function pipe<I>(value: I): Pipe<I>;
 export declare function pipeline<T>(arg: T): T;
@@ -19,5 +18,5 @@ export declare namespace pList {
     function map<T, U>(f: (arg: T) => U): (arr: T[]) => U[];
 }
 export declare namespace p {
-    function map<T, U>(f: (arg: T) => U): (arr: Iterable<T>) => Iter<U>;
+    function map<T, U>(f: (arg: T) => U): (arr: Iterable<T>) => import("../iter/iter").Iter<U>;
 }

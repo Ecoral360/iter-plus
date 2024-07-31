@@ -1,4 +1,4 @@
-import { Option } from '../option';
+import { Option } from '../option/option';
 export declare class Iter<T> {
     private iterator;
     constructor(iterator: Iterator<T, undefined>);
