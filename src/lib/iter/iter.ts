@@ -49,12 +49,16 @@ export class Iter<T> {
      * Example:
      * iter(1, 2, 3, 4, 5, 6).step(2).map(num.square)
      */
-    step(n: number): Iter<T> {
+    step(n: number, opts = { takeFirst: false }): Iter<T> {
         const previousIter = this.iterator;
         return new Iter({
             next() {
                 let nextEl = previousIter.next();
-                for (let step = 0; step < n; step++) {
+                if (opts.takeFirst) {
+                    opts.takeFirst = false;
+                    return nextEl;
+                }
+                for (let step = 1; step < n; step++) {
                     nextEl = previousIter.next();
                 }
                 return nextEl;
@@ -212,6 +216,10 @@ iter.take = <T>(n: number): IterCB<T, T> => {
 
 iter.skip = <T>(n: number): IterCB<T, T> => {
     return (it) => iter(it).skip(n);
+};
+
+iter.step = <T>(n: number, opts = { takeFirst: false }): IterCB<T, T> => {
+    return (it) => iter(it).step(n, opts);
 };
 
 iter.map = <T, U>(func: (el: T) => U): IterCB<T, U> => {
