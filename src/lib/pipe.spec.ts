@@ -4,7 +4,7 @@ import { pipe, p, pList, pipeline } from './pipe/pipe';
 
 import TEST_OBJ from './obj.test.json';
 import { iter } from './iter/iter';
-import { None, Option, option, Some } from './option';
+import { None, Option, option, Some } from './option/option';
 
 test('obj', (t) => {
   const keys = Object.keys(TEST_OBJ).map((k) => k.toUpperCase());
@@ -50,8 +50,7 @@ test('pipelines 2', (t) => {
   const actualProjects = pipe(TEST_OBJ['employees'])
     .$(iter.flatMap((el) => el.projects))
     .$$((el) => el.name)
-    .$(iter.reduce((acc, curr) => `${acc}, ${curr}`))
-    .$(option.unwrapOr(''))
+    .$(iter.reduce((acc, curr) => `${acc}, ${curr}`, ''))
     .get();
 
   t.deepEqual(actualProjects, expectedProjects);
