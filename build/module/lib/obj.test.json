@@ -1,0 +1,137 @@
+{
+    "company": "Tech Innovators Inc.",
+    "employees": [
+        {
+            "id": 1,
+            "name": "Alice Johnson",
+            "age": 29,
+            "department": "Engineering",
+            "role": "Software Engineer",
+            "contact": {
+                "email": "alice.johnson@techinnovators.com",
+                "phone": "555-1234"
+            },
+            "address": {
+                "street": "123 Elm St",
+                "city": "Metropolis",
+                "state": "CA",
+                "zip": "90001"
+            },
+            "skills": ["JavaScript", "React", "Node.js"],
+            "projects": [
+                {
+                    "name": "Project Alpha",
+                    "status": "In Progress",
+                    "deadline": "2024-09-30"
+                },
+                {
+                    "name": "Project Beta",
+                    "status": "Completed",
+                    "deadline": "2023-12-15"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Bob Smith",
+            "age": 34,
+            "department": "Marketing",
+            "role": "Marketing Manager",
+            "contact": {
+                "email": "bob.smith@techinnovators.com",
+                "phone": "555-5678"
+            },
+            "address": {
+                "street": "456 Oak St",
+                "city": "Metropolis",
+                "state": "CA",
+                "zip": "90002"
+            },
+            "skills": ["SEO", "Content Marketing", "Social Media"],
+            "projects": [
+                {
+                    "name": "Project Gamma",
+                    "status": "In Progress",
+                    "deadline": "2024-08-15"
+                },
+                {
+                    "name": "Project Delta",
+                    "status": "Completed",
+                    "deadline": "2023-11-01"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Carol Martinez",
+            "age": 41,
+            "department": "HR",
+            "role": "HR Specialist",
+            "contact": {
+                "email": "carol.martinez@techinnovators.com",
+                "phone": "555-9012"
+            },
+            "address": {
+                "street": "789 Pine St",
+                "city": "Metropolis",
+                "state": "CA",
+                "zip": "90003"
+            },
+            "skills": ["Recruitment", "Employee Relations", "Compliance"],
+            "projects": [
+                {
+                    "name": "Project Epsilon",
+                    "status": "In Progress",
+                    "deadline": "2024-07-01"
+                },
+                {
+                    "name": "Project Zeta",
+                    "status": "Completed",
+                    "deadline": "2023-10-20"
+                }
+            ]
+        }
+    ],
+    "departments": [
+        {
+            "name": "Engineering",
+            "head": "David Brown",
+            "budget": 1200000,
+            "employees_count": 50
+        },
+        {
+            "name": "Marketing",
+            "head": "Eva Green",
+            "budget": 800000,
+            "employees_count": 30
+        },
+        {
+            "name": "HR",
+            "head": "Frank White",
+            "budget": 400000,
+            "employees_count": 15
+        }
+    ],
+    "offices": [
+        {
+            "location": "Metropolis HQ",
+            "address": {
+                "street": "101 Central Ave",
+                "city": "Metropolis",
+                "state": "CA",
+                "zip": "90001"
+            },
+            "employees_count": 95
+        },
+        {
+            "location": "Downtown Branch",
+            "address": {
+                "street": "202 South St",
+                "city": "Metropolis",
+                "state": "CA",
+                "zip": "90002"
+            },
+            "employees_count": 20
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { pipe, p, pList, pipeline, num } from './pipe/pipe';
+import { pipe, p, pList, pipeline } from './pipe/pipe';
 
 import TEST_OBJ from './obj.test.json';
 import { iter } from './iter/iter';
@@ -28,16 +28,6 @@ test('iter', (t) => {
     t.deepEqual(v, keys);
 });
 
-test('num.sum', (t) => {
-    const expected = 10;
-
-    const actual = pipe(iter(1, 10, 2, 10, 3, 10, 4, 10, 5, 10, 6, 10))
-        .$(iter.step(2, { takeFirst: true }))
-        .$(iter.take(4))
-        .collect(num.sum);
-
-    t.deepEqual(actual, expected);
-});
 
 test('pipelines', (t) => {
     const expectedProjects = TEST_OBJ['employees']

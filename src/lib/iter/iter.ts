@@ -29,6 +29,22 @@ export class Iter<T> {
         });
     }
 
+    takeWhile(test: (el: T) => boolean): Iter<T> {
+        const previousIter = this.iterator;
+        let stopTake = false;
+        return new Iter({
+            next() {
+                if (stopTake) return { value: undefined, done: true };
+
+                const nextEl = previousIter.next();
+                stopTake = nextEl.done || !test(nextEl.value);
+                if (stopTake) return { value: undefined, done: true };
+
+                return nextEl;
+            },
+        });
+    }
+
     skip(n: number): Iter<T> {
         const previousIter = this.iterator;
         let skipped = 0;
@@ -41,6 +57,30 @@ export class Iter<T> {
                 return nextEl;
             },
         });
+    }
+
+    skipWhile(test: (el: T) => boolean): Iter<T> {
+        const previousIter = this.iterator;
+        let stopSkip = false;
+        return new Iter({
+            next() {
+                let nextEl: IteratorResult<T, undefined>;
+
+                do {
+                    nextEl = previousIter.next();
+
+                    stopSkip ||= nextEl.done || !test(nextEl.value);
+                } while (!stopSkip);
+
+                return nextEl;
+            },
+        });
+    }
+
+    nth(n: number): Option<T> {
+        const next = this.skip(n).next();
+        if (next.done) return None();
+        return Some(next.value);
     }
 
     /**
@@ -180,6 +220,10 @@ export class Iter<T> {
 
         if (initial !== undefined) return current;
         return Some(current as U);
+    }
+
+    apply<U>(func: (it: Iter<T>) => Iter<U>): Iter<U> {
+        return func(this);
     }
 
     collect<U>(reducer: (it: Iter<T>) => U): U;

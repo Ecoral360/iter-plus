@@ -1,9 +1,9 @@
 import { ElementOf } from '../types';
-export * from './pipe-ns';
 export declare class Pipe<I> {
     private func;
     constructor(func: () => I);
     get(): I;
+    collect<U>(this: Pipe<Iterable<ElementOf<I>>>, reducer: (it: Iterable<ElementOf<I>>) => U): U;
     collect(this: Pipe<Iterable<ElementOf<I>>>): ElementOf<I>[];
     $<O>(func: (arg: I) => O): Pipe<O>;
     $$<O>(func: (arg: ElementOf<I>) => O): Pipe<import("../iter/iter").Iter<O>>;

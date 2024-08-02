@@ -6,27 +6,52 @@ export declare class Iter<T> {
     next(): IteratorResult<T, undefined>;
     forEach(func: (el: T) => void): void;
     take(n: number): Iter<T>;
+    takeWhile(test: (el: T) => boolean): Iter<T>;
     skip(n: number): Iter<T>;
+    skipWhile(test: (el: T) => boolean): Iter<T>;
+    nth(n: number): Option<T>;
+    /**
+     * Method that that skips `n` elements of the iterator each time
+     *
+     * Example:
+     * iter(1, 2, 3, 4, 5, 6).step(2).map(num.square)
+     */
+    step(n: number, opts?: {
+        takeFirst: boolean;
+    }): Iter<T>;
+    extend(...iterables: Iterable<T>[]): Iter<T>;
     inspect(func: (el: T) => void): Iter<T>;
     map<U>(func: (el: T) => U): Iter<U>;
     filter(func: (el: T) => boolean): Iter<T>;
     filterMap<U>(func: (el: T) => Option<U>): Iter<U>;
     flatten<E>(this: Iter<Iterable<E>>): Iter<E>;
     reduce(func: (prev: T, curr: T) => T): Option<T>;
-    reduce(func: (prev: T, curr: T) => T, initial: T): Option<T>;
-    reduce<U>(func: (prev: U, curr: T) => U, initial: U): Option<U>;
+    reduce(func: (prev: T, curr: T) => T, initial: T): T;
+    reduce<U>(func: (prev: U, curr: T) => U, initial: U): U;
+    apply<U>(func: (it: Iter<T>) => Iter<U>): Iter<U>;
+    collect<U>(reducer: (it: Iter<T>) => U): U;
     collect(): T[];
 }
+export declare function iter<T>(el1: T, el2: T, ...eln: T[]): Iter<T>;
 export declare function iter<T>(it: Iterable<T>): Iter<T>;
 export declare namespace iter {
+    var extend: <T>(iterable: Iterable<T>) => ((it: Iterable<T>) => Iter<T>);
     var take: <T>(n: number) => IterCB<T, T>;
     var skip: <T>(n: number) => IterCB<T, T>;
+    var step: <T>(n: number, opts?: {
+        takeFirst: boolean;
+    }) => IterCB<T, T>;
     var map: <T, U>(func: (el: T) => U) => IterCB<T, U>;
     var flatMap: <T, U>(func: (el: T) => Iterable<U>) => ((it: Iterable<T>) => Iter<U>);
     var mapFlat: <T, U>(func: (el: T) => U) => ((it: Iter<Iterable<T>> | Iterable<Iterable<T>>) => Iter<U>);
     var inspect: <T>(func: (el: T) => void) => IterCB<T, T>;
     var flatten: <E>(it: Iter<Iterable<E>> | Iterable<Iterable<E>>) => Iter<E>;
-    var reduce: <T, U = T>(func: (prev: U, curr: T) => U, initial?: U) => ((it: Iterable<T>) => Option<U>);
+    var reduce: IterReduce;
 }
 type IterCB<T, U> = (it: Iterable<T>) => Iter<U>;
+type IterReduce = {
+    <T>(func: (prev: T, curr: T) => T): (it: Iterable<T>) => Option<T>;
+    <T>(func: (prev: T, curr: T) => T, initial: T): (it: Iterable<T>) => T;
+    <T, U>(func: (prev: U, curr: T) => U, initial: U): (it: Iterable<T>) => U;
+};
 export {};
