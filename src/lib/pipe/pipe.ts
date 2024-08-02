@@ -1,7 +1,5 @@
-import { iter } from '../iter/iter';
+import { iter } from '../iter';
 import { ElementOf } from '../types';
-
-export * from './pipeable';
 
 export class Pipe<I> {
     constructor(private func: () => I) { }

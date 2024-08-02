@@ -1,7 +1,6 @@
 import test from 'ava';
 
-import { iter } from './iter/iter';
-import { num } from './pipe/pipeable';
+import { iter } from './iter';
 
 test('iter.extend', (t) => {
     const expected = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -23,7 +22,7 @@ test('num.sum', (t) => {
     const actual = iter(1, 10, 2, 10, 3, 10, 4, 10, 5, 10, 6, 10)
         .step(2, { takeFirst: true })
         .take(4)
-        .collect(num.sum);
+        .collect(iter.num.sum);
 
     t.deepEqual(actual, expected);
 });
@@ -33,11 +32,11 @@ test('skip and skipWhile', (t) => {
 
     const part1 = iter(1, 2, 3, 4, 5, 6, 10)
         .skip(2)
-        .collect(num.sum);
+        .collect(iter.num.sum);
 
     const part2 = iter(1, 2, 3, 4, 5, 6, 10)
-        .skipWhile(num.lt(3))
-        .collect(num.sum);
+        .skipWhile(iter.num.lt(3))
+        .collect(iter.num.sum);
 
     t.deepEqual(part1, expected);
     t.deepEqual(part2, expected);
@@ -48,11 +47,11 @@ test('take and takeWhile', (t) => {
 
     const part1 = iter(1, 2, 3, 4, 5, 6, 10)
         .take(4)
-        .collect(num.sum);
+        .collect(iter.num.sum);
 
     const part2 = iter(1, 2, 3, 4, 5, 6, 10)
-        .takeWhile(num.lt(5))
-        .collect(num.sum);
+        .takeWhile(iter.num.lt(5))
+        .collect(iter.num.sum);
 
     t.deepEqual(part1, expected);
     t.deepEqual(part2, expected);

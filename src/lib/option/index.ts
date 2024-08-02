@@ -48,7 +48,7 @@ export const Some = <T>(val: T): SomeType<T> =>
   new OptionClass(val) as SomeType<T>;
 
 // -------------------- Pipeable versions of option functions --------------------
-export namespace option {
+export namespace opt {
   export const unwrap = <T>(opt: Option<T>): T => {
     return opt.unwrap() as T;
   };

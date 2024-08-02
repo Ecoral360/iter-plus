@@ -1,4 +1,4 @@
-import { None, Option, Some } from '../option/option';
+import { None, Option, Some } from '../option';
 
 export class Iter<T> {
     constructor(private iterator: Iterator<T, undefined>) { }
@@ -299,3 +299,51 @@ type IterReduce = {
 iter.reduce = ((func: any, initial: any) => {
     return (it: any) => iter(it).reduce(func, initial);
 }) as IterReduce;
+
+iter.num = {
+    sum(it: Iterable<number>): number {
+        return iter(it).reduce((prev, curr) => prev + curr, 0);
+    },
+
+    square(it: Iterable<number>): Iter<number> {
+        return iter(it).map((n) => n * n);
+    },
+
+    pow(n: number) { },
+
+    /**
+     * Greater Than predicate
+     */
+    gt(n: number) {
+        return (x: number) => x > n;
+    },
+
+    /**
+     * Greater Than or Equal predicate
+     */
+    gte(n: number) {
+        return (x: number) => x >= n;
+    },
+
+    /**
+     * Lesser Than predicate
+     */
+    lt(n: number) {
+        return (x: number) => x < n;
+    },
+
+    /**
+     * Lesser Than or Equal predicate
+     */
+    lte(n: number) {
+        return (x: number) => x <= n;
+    },
+};
+
+iter.obj = {
+    prop<N extends string, V, T extends { [key in N]: V }>(
+        name: N
+    ): (obj: T) => T[N] {
+        return (obj) => obj[name];
+    },
+};

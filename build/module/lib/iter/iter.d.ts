@@ -1,4 +1,4 @@
-import { Option } from '../option/option';
+import { Option } from '../option';
 export declare class Iter<T> {
     private iterator;
     constructor(iterator: Iterator<T, undefined>);
@@ -47,6 +47,30 @@ export declare namespace iter {
     var inspect: <T>(func: (el: T) => void) => IterCB<T, T>;
     var flatten: <E>(it: Iter<Iterable<E>> | Iterable<Iterable<E>>) => Iter<E>;
     var reduce: IterReduce;
+    var num: {
+        sum(it: Iterable<number>): number;
+        square(it: Iterable<number>): Iter<number>;
+        pow(n: number): void;
+        /**
+         * Greater Than predicate
+         */
+        gt(n: number): (x: number) => boolean;
+        /**
+         * Greater Than or Equal predicate
+         */
+        gte(n: number): (x: number) => boolean;
+        /**
+         * Lesser Than predicate
+         */
+        lt(n: number): (x: number) => boolean;
+        /**
+         * Lesser Than or Equal predicate
+         */
+        lte(n: number): (x: number) => boolean;
+    };
+    var obj: {
+        prop<N extends string, V, T extends { [key in N]: V; }>(name: N): (obj: T) => T[N];
+    };
 }
 type IterCB<T, U> = (it: Iterable<T>) => Iter<U>;
 type IterReduce = {

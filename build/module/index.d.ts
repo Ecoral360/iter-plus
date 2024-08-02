@@ -1,4 +1,4 @@
-export * from './lib/iter/iter';
-export * from './lib/pipe/pipe';
-export * from './lib/option/option';
-export * from './lib/result/result';
+export * from './lib/iter';
+export * from './lib/pipe';
+export * as Option from './lib/option';
+export * as Result from './lib/result';

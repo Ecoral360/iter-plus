@@ -3,8 +3,8 @@ import test from 'ava';
 import { pipe } from './pipe/pipe';
 
 import TEST_OBJ from './obj.test.json';
-import { iter } from './iter/iter';
-import { None, Option, option, Some } from './option/option';
+import { iter } from './iter';
+import { opt } from './option';
 
 test('obj', (t) => {
     const keys = Object.keys(TEST_OBJ).map((k) => k.toUpperCase());
@@ -27,7 +27,6 @@ test('iter', (t) => {
 
     t.deepEqual(v, keys);
 });
-
 
 test('pipelines', (t) => {
     const expectedProjects = TEST_OBJ['employees']
@@ -52,7 +51,7 @@ test('pipelines 2', (t) => {
         .$(iter.flatMap((el) => el.projects))
         .$$((el) => el.name)
         .$(iter.reduce((acc, curr) => `${acc}, ${curr}`))
-        .$(option.unwrapOr(''))
+        .$(opt.unwrapOr(''))
         .get();
 
     t.deepEqual(actualProjects, expectedProjects);
