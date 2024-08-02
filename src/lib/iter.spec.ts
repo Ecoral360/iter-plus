@@ -1,7 +1,7 @@
 import test from 'ava';
 
 import { iter } from './iter/iter';
-import { num } from './pipe/pipeables';
+import { num } from './pipe/pipeable';
 
 test('iter.extend', (t) => {
     const expected = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];

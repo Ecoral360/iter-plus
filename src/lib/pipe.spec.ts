@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { pipe, p, pList, pipeline } from './pipe/pipe';
+import { pipe } from './pipe/pipe';
 
 import TEST_OBJ from './obj.test.json';
 import { iter } from './iter/iter';

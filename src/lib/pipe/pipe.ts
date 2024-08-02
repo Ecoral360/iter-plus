@@ -1,6 +1,8 @@
 import { iter } from '../iter/iter';
 import { ElementOf } from '../types';
 
+export * from './pipeable';
+
 export class Pipe<I> {
     constructor(private func: () => I) { }
 
@@ -69,16 +71,4 @@ export function pipeline<T1, T2, T3, T4, O>(
 export function pipeline<T, O>(arg: T, ...fns: ((arg: any) => any)[]): T | O {
     if (fns.length === 0) return arg;
     return fns.reduce((acc, fn) => fn(acc), arg);
-}
-
-export namespace pList {
-    export function map<T, U>(f: (arg: T) => U) {
-        return (arr: T[]) => arr.map(f);
-    }
-}
-
-export namespace p {
-    export function map<T, U>(f: (arg: T) => U) {
-        return (arr: Iterable<T>) => iter(arr).map(f);
-    }
 }
