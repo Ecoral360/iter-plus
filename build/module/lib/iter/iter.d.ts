@@ -9,6 +9,16 @@ export declare class Iter<T> {
     takeWhile(test: (el: T) => boolean): Iter<T>;
     skip(n: number): Iter<T>;
     skipWhile(test: (el: T) => boolean): Iter<T>;
+    /**
+     * @param opts
+     * `startUnbalanced`: if `true`, assumes `inc` matched once before the balancing
+     * `inclusive`: if `true`, the last match is also returned
+     */
+    takeBalanced(inc: (el: T) => boolean, dec: (el: T) => boolean, opts?: {
+        startUnbalanced: boolean;
+        inclusiveEnd: boolean;
+    }): Iter<T>;
+    branch(cond: (it: Iter<T>) => boolean, thenBr: (it: Iter<T>) => Iter<T>, elseBr?: (it: Iter<T>) => Iter<T>): Iter<T>;
     nth(n: number): Option<T>;
     /**
      * Method that that skips `n` elements of the iterator each time
@@ -25,9 +35,9 @@ export declare class Iter<T> {
     filter(func: (el: T) => boolean): Iter<T>;
     filterMap<U>(func: (el: T) => Option<U>): Iter<U>;
     flatten<E>(this: Iter<Iterable<E>>): Iter<E>;
-    reduce(func: (prev: T, curr: T) => T): Option<T>;
-    reduce(func: (prev: T, curr: T) => T, initial: T): T;
-    reduce<U>(func: (prev: U, curr: T) => U, initial: U): U;
+    reduce(func: (prev: T, curr: T, index: number) => T): Option<T>;
+    reduce(func: (prev: T, curr: T, index: number) => T, initial: T): T;
+    reduce<U>(func: (prev: U, curr: T, index: number) => U, initial: U): U;
     apply<U>(func: (it: Iter<T>) => Iter<U>): Iter<U>;
     collect<U>(reducer: (it: Iter<T>) => U): U;
     collect(): T[];
@@ -67,6 +77,15 @@ export declare namespace iter {
          * Lesser Than or Equal predicate
          */
         lte(n: number): (x: number) => boolean;
+    };
+    var str: {
+        join<T extends {
+            toString(): string;
+        }>(sep: string): (it: Iterable<T>) => string;
+    };
+    var pred: {
+        not<T extends (...arg: any) => boolean>(f: T): T;
+        eq<T>(val: T): (other: T) => boolean;
     };
     var obj: {
         prop<N extends string, V, T extends { [key in N]: V; }>(name: N): (obj: T) => T[N];

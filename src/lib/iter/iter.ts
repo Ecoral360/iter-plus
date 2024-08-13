@@ -77,6 +77,52 @@ export class Iter<T> {
         });
     }
 
+    /**
+     * @param opts
+     * `startUnbalanced`: if `true`, assumes `inc` matched once before the balancing
+     * `inclusive`: if `true`, the last match is also returned
+     */
+    takeBalanced(
+        inc: (el: T) => boolean,
+        dec: (el: T) => boolean,
+        opts = { startUnbalanced: false, inclusiveEnd: false }
+    ): Iter<T> {
+        const previousIter = this.iterator;
+        let done = false;
+        let score = opts.startUnbalanced ? 1 : 0;
+        return new Iter({
+            next() {
+                if (done) return { value: undefined, done: true };
+
+                const nextEl = previousIter.next();
+                if (nextEl.done) return { value: undefined, done: true };
+
+                if (inc(nextEl.value)) {
+                    score++;
+                } else if (dec(nextEl.value)) {
+                    score--;
+                }
+
+                if (score === 0) {
+                    done = true;
+                    if (!opts.inclusiveEnd) return { value: undefined, done: true };
+                }
+
+                return nextEl;
+            },
+        });
+    }
+
+    branch(
+        cond: (it: Iter<T>) => boolean,
+        thenBr: (it: Iter<T>) => Iter<T>,
+        elseBr?: (it: Iter<T>) => Iter<T>
+    ): Iter<T> {
+        if (cond(this)) return thenBr(this);
+        else if (elseBr !== undefined) return elseBr(this);
+        else return this;
+    }
+
     nth(n: number): Option<T> {
         const next = this.skip(n).next();
         if (next.done) return None();
@@ -201,21 +247,27 @@ export class Iter<T> {
         });
     }
 
-    reduce(func: (prev: T, curr: T) => T): Option<T>;
-    reduce(func: (prev: T, curr: T) => T, initial: T): T;
-    reduce<U>(func: (prev: U, curr: T) => U, initial: U): U;
-    reduce<U>(func: (prev: U, curr: T) => U, initial?: U): T | U | Option<U> {
+    reduce(func: (prev: T, curr: T, index: number) => T): Option<T>;
+    reduce(func: (prev: T, curr: T, index: number) => T, initial: T): T;
+    reduce<U>(func: (prev: U, curr: T, index: number) => U, initial: U): U;
+    reduce<U>(
+        func: (prev: U, curr: T, index: number) => U,
+        initial?: U
+    ): T | U | Option<U> {
         let current: any;
+        let idx = 0;
         if (initial !== undefined) {
             current = initial;
         } else {
             const next = this.next();
             if (next.done) return None();
             current = next.value;
+            idx++;
         }
 
         for (const el of this) {
-            current = func(current, el);
+            current = func(current, el, idx);
+            idx++;
         }
 
         if (initial !== undefined) return current;
@@ -337,6 +389,29 @@ iter.num = {
      */
     lte(n: number) {
         return (x: number) => x <= n;
+    },
+};
+
+iter.str = {
+    join<T extends { toString(): string }>(
+        sep: string
+    ): (it: Iterable<T>) => string {
+        return (it) =>
+            iter(it).reduce(
+                (prev, curr, idx) =>
+                    idx === 0 ? curr.toString() : prev.toString() + sep + curr.toString(),
+                ''
+            );
+    },
+};
+
+iter.pred = {
+    not<T extends (...arg: any) => boolean>(f: T): T {
+        return ((...arg: any) => !f(...arg)) as T;
+    },
+
+    eq<T>(val: T) {
+        return (other: T) => val === other;
     },
 };
 
