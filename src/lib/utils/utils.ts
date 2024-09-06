@@ -1,16 +1,17 @@
 import { iter } from '../iter';
+import { op } from '../op';
 
 export function curry<T extends (...args: any) => any>(func: T) {
-    const argStr = iter(func.toString())
-        .skipWhile((el) => el !== '(')
-        .takeBalanced(
-            (el) => el === '(',
-            (el) => el === ')'
-        )
-        .skip(1)
-        .collect(iter.str.join(''));
+  const argStr = iter(func.toString())
+    .skipWhile((el) => el !== '(')
+    .takeBalanced(
+      (el) => el === '(',
+      (el) => el === ')'
+    )
+    .skip(1)
+    .collect(op.join(''));
 
-    const args = iter(argStr.split(',')).map((el) => el.trim());
+  const args = iter(argStr.split(',')).map((el) => el.trim());
 
-    return args;
+  return args;
 }

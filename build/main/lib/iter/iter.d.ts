@@ -30,6 +30,7 @@ export declare class Iter<T> {
         takeFirst: boolean;
     }): Iter<T>;
     extend(...iterables: Iterable<T>[]): Iter<T>;
+    batch(size: number): Iter<Iter<T>>;
     inspect(func: (el: T) => void): Iter<T>;
     map<U>(func: (el: T) => U): Iter<U>;
     filter(func: (el: T) => boolean): Iter<T>;
@@ -56,42 +57,14 @@ export declare namespace iter {
     var mapFlat: <T, U>(func: (el: T) => U) => ((it: Iter<Iterable<T>> | Iterable<Iterable<T>>) => Iter<U>);
     var inspect: <T>(func: (el: T) => void) => IterCB<T, T>;
     var flatten: <E>(it: Iter<Iterable<E>> | Iterable<Iterable<E>>) => Iter<E>;
+    var collect: CollectFunc;
     var reduce: IterReduce;
-    var num: {
-        sum(it: Iterable<number>): number;
-        square(it: Iterable<number>): Iter<number>;
-        pow(n: number): void;
-        /**
-         * Greater Than predicate
-         */
-        gt(n: number): (x: number) => boolean;
-        /**
-         * Greater Than or Equal predicate
-         */
-        gte(n: number): (x: number) => boolean;
-        /**
-         * Lesser Than predicate
-         */
-        lt(n: number): (x: number) => boolean;
-        /**
-         * Lesser Than or Equal predicate
-         */
-        lte(n: number): (x: number) => boolean;
-    };
-    var str: {
-        join<T extends {
-            toString(): string;
-        }>(sep: string): (it: Iterable<T>) => string;
-    };
-    var pred: {
-        not<T extends (...arg: any) => boolean>(f: T): T;
-        eq<T>(val: T): (other: T) => boolean;
-    };
-    var obj: {
-        prop<N extends string, V, T extends { [key in N]: V; }>(name: N): (obj: T) => T[N];
-    };
 }
 type IterCB<T, U> = (it: Iterable<T>) => Iter<U>;
+type CollectFunc = {
+    <T, U>(reducer: (it: Iter<T>) => U): (it: Iter<T>) => U;
+    <T>(): (it: Iter<T>) => T[];
+};
 type IterReduce = {
     <T>(func: (prev: T, curr: T) => T): (it: Iterable<T>) => Option<T>;
     <T>(func: (prev: T, curr: T) => T, initial: T): (it: Iterable<T>) => T;

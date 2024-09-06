@@ -1,9 +1,23 @@
-class OptionClass<T> {
-  constructor(public readonly val: T) {}
+export class Option<T> {
+  public readonly val: T;
+
+  constructor(val: T) {
+    this.val = val;
+  }
+
+  static _new(): Option<never>;
+  static _new<T>(val: T): Option<T>;
+  static _new<T>(val?: T): Option<T> | Option<never> {
+    if (arguments.length === 0) {
+      return new Option(undefined as never);
+    } else {
+      return new Option(val as T);
+    }
+  }
 
   isSome = (): this is SomeType<T> => !this.isNone();
 
-  isNone = (): this is typeof None => this.val === _none;
+  isNone = (): this is NoneClass => this.val instanceof NoneClass;
 
   mapSome = <T2>(fn: (ok: T) => T2): Option<T2> => {
     if (this.isSome()) return Some(fn(this.val));
@@ -18,7 +32,7 @@ class OptionClass<T> {
     return this.val;
   }
 
-  unwrapOr<U>(this: OptionClass<typeof _none>, fallback: U): NoInfer<U>;
+  unwrapOr<U>(this: Option<never>, fallback: U): NoInfer<U>;
   unwrapOr(this: SomeType<T>, fallback: T): T;
   unwrapOr(fallback: T): T {
     if (this.isNone()) return fallback;
@@ -26,7 +40,7 @@ class OptionClass<T> {
   }
 
   unwrapOrElse<U>(
-    this: OptionClass<typeof _none>,
+    this: Option<never>,
     fallback: () => U
   ): NoInfer<U>;
   unwrapOrElse(this: SomeType<T>, fallback: () => T): T;
@@ -36,16 +50,21 @@ class OptionClass<T> {
   }
 }
 
-const _none: unique symbol = Symbol('None value');
+export class SomeClass<T> extends Option<T> {}
 
-export type SomeType<T> = T extends typeof _none ? never : OptionClass<T>;
+export class NoneClass extends Option<never> {
+  constructor() {
+    super(undefined as never);
+  }
+}
 
-export const None = <T = typeof _none>() => new OptionClass<T>(_none as any);
+export type SomeType<T> = T extends never ? never : Option<T>;
 
-export type Option<T> = OptionClass<T>;
+export const None = (): Option<never> => Option._new();
 
-export const Some = <T>(val: T): SomeType<T> =>
-  new OptionClass(val) as SomeType<T>;
+
+export const Some = <T>(val: T): Option<T> =>
+  new Option(val) as SomeType<T>;
 
 // -------------------- Pipeable versions of option functions --------------------
 export namespace opt {
