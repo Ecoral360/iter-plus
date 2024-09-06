@@ -26,9 +26,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Result = exports.Option = void 0;
+exports.result = exports.option = void 0;
 __exportStar(require("./lib/iter"), exports);
 __exportStar(require("./lib/pipe"), exports);
-exports.Option = __importStar(require("./lib/option"));
-exports.Result = __importStar(require("./lib/result"));
+exports.option = __importStar(require("./lib/option"));
+exports.result = __importStar(require("./lib/result"));
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSw2Q0FBMkI7QUFDM0IsNkNBQTJCO0FBRTNCLHVEQUF1QztBQUN2Qyx1REFBdUMifQ==
