@@ -1,46 +1,18 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mapErr = exports.mapOk = exports.flatMapResults = exports.mapResults = exports.isErr = exports.isOk = exports.Err = exports.Ok = void 0;
-const Ok = (ok) => ({ ok });
-exports.Ok = Ok;
-const Err = (err) => ({ err });
-exports.Err = Err;
-const isOk = (result) => 'ok' in result;
-exports.isOk = isOk;
-const isErr = (result) => 'err' in result;
-exports.isErr = isErr;
-const mapResults = (arr, fn) => {
-    const oks = [];
-    for (const el of arr) {
-        const val = fn(el);
-        if ('err' in val)
-            return val;
-        oks.push(val.ok);
-    }
-    return (0, exports.Ok)(oks);
-};
-exports.mapResults = mapResults;
-const flatMapResults = (arr, fn) => {
-    const oks = [];
-    for (const el of arr) {
-        const val = fn(el);
-        if ('err' in val)
-            return val;
-        oks.push(val.ok);
-    }
-    return (0, exports.Ok)(oks.flat());
-};
-exports.flatMapResults = flatMapResults;
-const mapOk = (result, fn) => {
-    if ((0, exports.isOk)(result))
-        return (0, exports.Ok)(fn(result.ok));
-    return result;
-};
-exports.mapOk = mapOk;
-const mapErr = (result, fn) => {
-    if ((0, exports.isErr)(result))
-        return (0, exports.Err)(fn(result.err));
-    return result;
-};
-exports.mapErr = mapErr;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvbGliL3Jlc3VsdC9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFLTyxNQUFNLEVBQUUsR0FBRyxDQUFPLEVBQUssRUFBZ0IsRUFBRSxDQUFDLENBQUMsRUFBRSxFQUFFLEVBQUUsQ0FBQyxDQUFDO0FBQTdDLFFBQUEsRUFBRSxNQUEyQztBQUNuRCxNQUFNLEdBQUcsR0FBRyxDQUFPLEdBQU0sRUFBZ0IsRUFBRSxDQUFDLENBQUMsRUFBRSxHQUFHLEVBQUUsQ0FBQyxDQUFDO0FBQWhELFFBQUEsR0FBRyxPQUE2QztBQUV0RCxNQUFNLElBQUksR0FBRyxDQUFPLE1BQW9CLEVBQXVCLEVBQUUsQ0FDdEUsSUFBSSxJQUFJLE1BQU0sQ0FBQztBQURKLFFBQUEsSUFBSSxRQUNBO0FBRVYsTUFBTSxLQUFLLEdBQUcsQ0FBTyxNQUFvQixFQUF3QixFQUFFLENBQ3hFLEtBQUssSUFBSSxNQUFNLENBQUM7QUFETCxRQUFBLEtBQUssU0FDQTtBQUVYLE1BQU0sVUFBVSxHQUFHLENBQ3hCLEdBQVEsRUFDUixFQUEyQixFQUNYLEVBQUU7SUFDbEIsTUFBTSxHQUFHLEdBQUcsRUFBRSxDQUFDO0lBQ2YsS0FBSyxNQUFNLEVBQUUsSUFBSSxHQUFHLEVBQUUsQ0FBQztRQUNyQixNQUFNLEdBQUcsR0FBRyxFQUFFLENBQUMsRUFBRSxDQUFDLENBQUM7UUFDbkIsSUFBSSxLQUFLLElBQUksR0FBRztZQUFFLE9BQU8sR0FBRyxDQUFDO1FBQzdCLEdBQUcsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxDQUFDO0lBQ25CLENBQUM7SUFDRCxPQUFPLElBQUEsVUFBRSxFQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ2pCLENBQUMsQ0FBQztBQVhXLFFBQUEsVUFBVSxjQVdyQjtBQUVLLE1BQU0sY0FBYyxHQUFHLENBQzVCLEdBQVEsRUFDUixFQUE2QixFQUNiLEVBQUU7SUFDbEIsTUFBTSxHQUFHLEdBQUcsRUFBRSxDQUFDO0lBQ2YsS0FBSyxNQUFNLEVBQUUsSUFBSSxHQUFHLEVBQUUsQ0FBQztRQUNyQixNQUFNLEdBQUcsR0FBRyxFQUFFLENBQUMsRUFBRSxDQUFDLENBQUM7UUFDbkIsSUFBSSxLQUFLLElBQUksR0FBRztZQUFFLE9BQU8sR0FBRyxDQUFDO1FBQzdCLEdBQUcsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxDQUFDO0lBQ25CLENBQUM7SUFDRCxPQUFPLElBQUEsVUFBRSxFQUFDLEdBQUcsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxDQUFDO0FBQ3hCLENBQUMsQ0FBQztBQVhXLFFBQUEsY0FBYyxrQkFXekI7QUFFSyxNQUFNLEtBQUssR0FBRyxDQUNuQixNQUFvQixFQUNwQixFQUFpQixFQUNGLEVBQUU7SUFDakIsSUFBSSxJQUFBLFlBQUksRUFBQyxNQUFNLENBQUM7UUFBRSxPQUFPLElBQUEsVUFBRSxFQUFDLEVBQUUsQ0FBQyxNQUFNLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQztJQUMzQyxPQUFPLE1BQU0sQ0FBQztBQUNoQixDQUFDLENBQUM7QUFOVyxRQUFBLEtBQUssU0FNaEI7QUFFSyxNQUFNLE1BQU0sR0FBRyxDQUNwQixNQUFvQixFQUNwQixFQUFrQixFQUNILEVBQUU7SUFDakIsSUFBSSxJQUFBLGFBQUssRUFBQyxNQUFNLENBQUM7UUFBRSxPQUFPLElBQUEsV0FBRyxFQUFDLEVBQUUsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQztJQUM5QyxPQUFPLE1BQU0sQ0FBQztBQUNoQixDQUFDLENBQUM7QUFOVyxRQUFBLE1BQU0sVUFNakIifQ==
+__exportStar(require("./result2"), exports);
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvbGliL3Jlc3VsdC9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsNENBQTBCIn0=

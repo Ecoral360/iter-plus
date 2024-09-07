@@ -248,7 +248,7 @@ export class Iter<T> {
           result = func(nextEl.value);
         } while (result.isNone());
 
-        return { value: result.val, done: false };
+        return { value: result.unsafeUnwrap(), done: false };
       },
     });
   }
@@ -328,7 +328,7 @@ export function iter<T>(it: T | Iterable<T>, ...elements: T[]): Iter<T> {
 type IterCB<T, U> = (it: Iterable<T>) => Iter<U>;
 
 iter.extend = <T>(iterable: Iterable<T>): ((it: Iterable<T>) => Iter<T>) => {
-  return (it) => iter(it);
+  return (it) => iter(it).extend(iterable);
 };
 
 iter.take = <T>(n: number): IterCB<T, T> => {

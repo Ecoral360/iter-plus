@@ -1,28 +1,35 @@
 export class Option<T> {
-  public readonly val: T;
-
-  constructor(val: T) {
-    this.val = val;
-  }
+  private constructor(
+    private readonly val: T,
+    private readonly _isNone: boolean
+  ) {}
 
   static _new(): Option<never>;
   static _new<T>(val: T): Option<T>;
   static _new<T>(val?: T): Option<T> | Option<never> {
     if (arguments.length === 0) {
-      return new Option(undefined as never);
+      return new Option(undefined as never, true);
     } else {
-      return new Option(val as T);
+      return new Option(val as T, false);
     }
   }
 
-  isSome = (): this is SomeType<T> => !this.isNone();
+  isSome = (): this is SomeType<T> => !this._isNone;
 
-  isNone = (): this is NoneClass => this.val instanceof NoneClass;
+  isNone = (): this is NoneType => this._isNone;
 
-  mapSome = <T2>(fn: (ok: T) => T2): Option<T2> => {
+  map<U>(fn: (val: T) => U): Option<U> {
     if (this.isSome()) return Some(fn(this.val));
     return None();
-  };
+  }
+
+  /**
+   * Returns the inner value without checking if the value is None.
+   * **Only do this if you already checked the value was Some<T>**
+   */
+  unsafeUnwrap(): T {
+    return this.val;
+  }
 
   /**
    * @throws Error if called on {@link None}
@@ -39,10 +46,7 @@ export class Option<T> {
     return this.val;
   }
 
-  unwrapOrElse<U>(
-    this: Option<never>,
-    fallback: () => U
-  ): NoInfer<U>;
+  unwrapOrElse<U>(this: Option<never>, fallback: () => U): NoInfer<U>;
   unwrapOrElse(this: SomeType<T>, fallback: () => T): T;
   unwrapOrElse(fallback: () => T): T {
     if (this.isNone()) return fallback();
@@ -50,44 +54,31 @@ export class Option<T> {
   }
 }
 
-export class SomeClass<T> extends Option<T> {}
-
-export class NoneClass extends Option<never> {
-  constructor() {
-    super(undefined as never);
-  }
-}
-
+export type NoneType = Option<never>;
 export type SomeType<T> = T extends never ? never : Option<T>;
 
-export const None = (): Option<never> => Option._new();
+export const None = (): NoneType => Option._new();
 
-
-export const Some = <T>(val: T): Option<T> =>
-  new Option(val) as SomeType<T>;
+export const Some = <T>(val: T): Option<T> => Option._new(val) as SomeType<T>;
 
 // -------------------- Pipeable versions of option functions --------------------
-export namespace opt {
-  export const unwrap = <T>(opt: Option<T>): T => {
-    return opt.unwrap() as T;
-  };
+export const unwrap = <T>(opt: Option<T>): T => {
+  return opt.unwrap() as T;
+};
 
-  export const unwrapOr = <T>(fallback: T): ((opt: Option<T>) => T) => {
-    return (opt) => (opt.isSome() ? opt.val : fallback);
-  };
+export const unwrapOr = <T>(fallback: T): ((opt: Option<T>) => T) => {
+  return (opt) => (opt.isSome() ? opt.unsafeUnwrap() : fallback);
+};
 
-  export const unwrapOrElse = <T>(
-    fallback: () => T
-  ): ((opt: Option<T>) => T) => {
-    return (opt) => (opt.isSome() ? opt.val : fallback());
-  };
+export const unwrapOrElse = <T>(fallback: () => T): ((opt: Option<T>) => T) => {
+  return (opt) => (opt.isSome() ? opt.unsafeUnwrap() : fallback());
+};
 
-  export const mapSome = <T, T2>(
-    fn: (ok: T) => T2
-  ): ((opt: Option<T>) => Option<T2>) => {
-    return (opt) => {
-      if (opt.isSome()) return Some(fn(opt.val));
-      return None();
-    };
+export const mapSome = <T, T2>(
+  fn: (ok: T) => T2
+): ((opt: Option<T>) => Option<T2>) => {
+  return (opt) => {
+    if (opt.isSome()) return Some(fn(opt.unsafeUnwrap()));
+    return None();
   };
-}
+};

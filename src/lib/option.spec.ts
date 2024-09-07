@@ -1,10 +1,6 @@
 import test from 'ava';
 
-import { pipe } from './pipe/pipe';
-
-import TEST_OBJ from './obj.test.json';
-import { iter } from './iter';
-import { None, opt, Some } from './option';
+import { None, Some } from './option';
 
 test('option', (t) => {
   const x = Some(12);
